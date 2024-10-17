@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 # %%
-def get_google_trends_data(search_terms, start_year=2004, end_year=None, frequency='weekly'):
+def get_google_trends_data(search_terms, start_year=2004, end_year=None, frequency='weekly', geo='GB'):
     """
     Fetch Google Trends data for multiple search terms.
     
@@ -30,7 +30,7 @@ def get_google_trends_data(search_terms, start_year=2004, end_year=None, frequen
         date_format = '%Y-%m-01'
         timeframe = f'{start_year}-01-01 {end_year}-12-31'
 
-        pytrends.build_payload(search_terms, cat=0, timeframe=timeframe, geo='GB', gprop='')
+        pytrends.build_payload(search_terms, cat=0, timeframe=timeframe, geo=geo, gprop='')
         data = pytrends.interest_over_time()
         
         if not data.empty:
@@ -45,7 +45,7 @@ def get_google_trends_data(search_terms, start_year=2004, end_year=None, frequen
             end_date = datetime(year, 12, 31)
             timeframe = f'{start_date.strftime("%Y-%m-%d")} {end_date.strftime("%Y-%m-%d")}'
             
-            pytrends.build_payload(search_terms, cat=0, timeframe=timeframe, geo='GB', gprop='')
+            pytrends.build_payload(search_terms, cat=0, timeframe=timeframe, geo=geo, gprop='')
             data = pytrends.interest_over_time()
             
             if not data.empty:
@@ -94,3 +94,9 @@ output_csv_for_term(trends_data2, 'bites on neck', 'bites_on_neck_trends_uk_week
 # %%
 trends_data3 = get_google_trends_data(['head lice', 'nits', 'lice treatment'], frequency='monthly')
 trends_data3.to_csv('google_trends_uk_monthly_by_year.csv', index=False)
+
+# %%
+trends_data6 = get_google_trends_data(['gym near me'])
+output_csv_for_term(trends_data6, 'gym near me', 'gym_uk_weekly_by_year_pivot.csv')
+
+# %%
